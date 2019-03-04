@@ -114,6 +114,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
+        apc:mpc_title="@string/nc_settings_appearance"
+        apc:mpc_title_color="@color/colorPrimary">
+
+        <com.yarolegovich.mp.MaterialSwitchPreference
+            android:id="@+id/settings_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            apc:mp_key="@string/nc_settings_theme_key"
+            apc:mp_title="@string/nc_settings_theme_title" />
+
+    </com.yarolegovich.mp.MaterialPreferenceCategory>
+
+    <com.yarolegovich.mp.MaterialPreferenceCategory
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         apc:mpc_title="@string/nc_settings_notification_sounds"
         apc:mpc_title_color="@color/colorPrimary">
 

@@ -72,7 +72,7 @@
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textColor="@color/nc_incoming_text_default"
+            android:textColor="@color/conversation_item_header"
             android:textSize="16sp"
             tools:text="Best conversation" />
 
@@ -83,7 +83,7 @@
             android:layout_alignParentEnd="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/warm_grey_two" />
+            android:textColor="@color/conversation_date" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -112,7 +112,7 @@
                 android:gravity="top"
                 android:lines="2"
                 android:singleLine="false"
-                android:textColor="@color/warm_grey_four"
+                android:textColor="@color/conversation_last_message"
                 tools:text="This is the last message\nof an incredibly long two line  conversation text" />
 
             <TextView
@@ -125,7 +125,7 @@
                 android:gravity="center"
                 android:lines="1"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/conversation_unread_bubble"
                 tools:text="1" />
 
         </RelativeLayout>

@@ -163,6 +163,9 @@ public class SettingsController extends BaseController {
     @BindView(R.id.settings_screen_lock_timeout)
     MaterialChoicePreference screenLockTimeoutChoicePreference;
 
+    @BindView(R.id.settings_theme)
+    MaterialSwitchPreference themeSwitchPreference;
+
     @BindView(R.id.message_text)
     TextView messageText;
 
@@ -191,6 +194,7 @@ public class SettingsController extends BaseController {
     private OnPreferenceValueChangedListener<Boolean> screenSecurityChangeListener;
     private OnPreferenceValueChangedListener<Boolean> screenLockChangeListener;
     private OnPreferenceValueChangedListener<String> screenLockTimeoutChangeListener;
+    private OnPreferenceValueChangedListener<Boolean> themeChangeListener;
 
     private Disposable profileQueryDisposable;
     private Disposable dbQueryDisposable;
@@ -226,6 +230,7 @@ public class SettingsController extends BaseController {
         appPreferences.registerScreenSecurityListener(screenSecurityChangeListener = new ScreenSecurityChangeListener());
         appPreferences.registerScreenLockListener(screenLockChangeListener = new ScreenLockListener());
         appPreferences.registerScreenLockTimeoutListener(screenLockTimeoutChangeListener = new ScreenLockTimeoutListener());
+        appPreferences.registerThemeChangeListener(themeChangeListener = new ThemeChangeListener());
 
         List<String> listWithIntFields = new ArrayList<>();
         listWithIntFields.add("proxy_port");
@@ -633,6 +638,7 @@ public class SettingsController extends BaseController {
                 messageView.setVisibility(View.GONE);
             }
         }
+        ((Checkable) themeSwitchPreference.findViewById(R.id.mp_checkable)).setChecked(appPreferences.isDarkThemeEnabled());
     }
 
     private void loadAvatarImage() {
@@ -664,6 +670,7 @@ public class SettingsController extends BaseController {
             appPreferences.unregisterScreenSecurityListener(screenSecurityChangeListener);
             appPreferences.unregisterScreenLockListener(screenLockChangeListener);
             appPreferences.unregisterScreenLockTimeoutListener(screenLockTimeoutChangeListener);
+            appPreferences.unregisterThemeChangeListener(themeChangeListener);
         }
         super.onDestroy();
     }
@@ -807,6 +814,14 @@ public class SettingsController extends BaseController {
 
                 showProxySettings();
             }
+        }
+    }
+
+    private class ThemeChangeListener implements OnPreferenceValueChangedListener<Boolean> {
+        @Override
+        public void onChanged(Boolean newValue) {
+            NextcloudTalkApplication.setAppTheme(newValue);
+            getActivity().recreate();
         }
     }
 }

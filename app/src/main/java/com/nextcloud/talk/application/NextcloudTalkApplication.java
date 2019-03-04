@@ -23,6 +23,8 @@ package com.nextcloud.talk.application;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
@@ -49,6 +51,7 @@ import com.nextcloud.talk.utils.DisplayUtils;
 import com.nextcloud.talk.utils.OkHttpNetworkFetcherWithCache;
 import com.nextcloud.talk.utils.database.arbitrarystorage.ArbitraryStorageModule;
 import com.nextcloud.talk.utils.database.user.UserModule;
+import com.nextcloud.talk.utils.preferences.AppPreferences;
 import com.nextcloud.talk.webrtc.MagicWebRTCUtils;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.twitter.TwitterEmojiProvider;
@@ -76,10 +79,14 @@ import java.util.concurrent.TimeUnit;
 @AutoInjector(NextcloudTalkApplication.class)
 public class NextcloudTalkApplication extends MultiDexApplication implements LifecycleObserver {
     private static final String TAG = NextcloudTalkApplication.class.getSimpleName();
+
     //region Singleton
     protected static NextcloudTalkApplication sharedApplication;
     //region Fields (components)
     protected NextcloudTalkApplicationComponent componentApplication;
+
+    @Inject
+    AppPreferences appPreferences;
     @Inject
     OkHttpClient okHttpClient;
     //endregion
@@ -114,8 +121,6 @@ public class NextcloudTalkApplication extends MultiDexApplication implements Lif
     //region Overridden methods
     @Override
     public void onCreate() {
-        super.onCreate();
-
         sharedApplication = this;
 
         initializeWebRtc();
@@ -123,6 +128,9 @@ public class NextcloudTalkApplication extends MultiDexApplication implements Lif
         buildComponent();
 
         componentApplication.inject(this);
+
+        setAppTheme(appPreferences.isDarkThemeEnabled());
+        super.onCreate();
 
         ImagePipelineConfig imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
                 .setNetworkFetcher(new OkHttpNetworkFetcherWithCache(okHttpClient))
@@ -168,6 +176,18 @@ public class NextcloudTalkApplication extends MultiDexApplication implements Lif
         return componentApplication;
     }
     //endregion
+
+    //region Setters
+    public static void setAppTheme(Boolean darkTheme) {
+        if (darkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+    //endregion
+
+
 
     //region Protected methods
     protected void buildComponent() {
